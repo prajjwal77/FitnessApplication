@@ -25,77 +25,37 @@ import com.FitnessApplication.Service.UserService;
 
 @Controller
 public class UserController {
-
-
-    @Autowired
+ @Autowired
     private UserService userService;
-    
-    // Home page
+
     @GetMapping("/")
-    public String homePage(Model model) {
-        // Add any required data to the model for the home page
-        model.addAttribute("welcomeMessage", "Welcome to FitnessApp!");
-        // You can also add user data or other content needed for the home page
-        return "home"; // This should match the name of your Thymeleaf template
+    public String Home() {
+        return "home";
+    }
+  //showing register page
+  	@GetMapping("/register")
+      public String showRegistrationForm(Model model) {
+          model.addAttribute("user", new User());
+          return "register";
+      }
+  	//...........................................................................................................
+  	//registering new user
+  	 @PostMapping("/register")
+  	    public String registerUser(@ModelAttribute("user") User user) {
+  	     userService.saveUser(user);  
+  		 return "register";
+  	    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
     }
 
-
-    // Create a new user
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
-    // Update a user
-    @PutMapping("/{userId}")
-    public User updateUser(@PathVariable Long userId, @RequestBody User updatedUser) {
-        return userService.updateUser(userId, updatedUser);
-    }
-
-    // Delete a user
-    @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
-    }
-
-    // Get a user by ID
-    @GetMapping("/{userId}")
-    public User getUserById(@PathVariable Long userId) {
-        return userService.getUserById(userId);
-    }
-
-    // Add a workout
-    @PostMapping("/{userId}/workouts")
-    public Workout addWorkoutToUser(@PathVariable Long userId, @RequestBody Workout workout) {
-        return userService.addWorkoutToUser(userId, workout);
-    }
-
-    // Get workouts
-    @GetMapping("/{userId}/workouts")
-    public List<Workout> getWorkoutsByUserId(@PathVariable Long userId) {
-        return userService.getWorkoutsByUserId(userId);
-    }
-
-    // Add a meal
-    @PostMapping("/{userId}/meals")
-    public Meal addMealToUser(@PathVariable Long userId, @RequestBody Meal meal) {
-        return userService.addMealToUser(userId, meal);
-    }
-
-    // Get meals
-    @GetMapping("/{userId}/meals")
-    public List<Meal> getMealsByUserId(@PathVariable Long userId) {
-        return userService.getMealsByUserId(userId);
-    }
-    // Add motivational content (global, not tied to a user)
-    @PostMapping("/motivational-content")
-    public MotivationalContent addMotivationalContent(@RequestBody MotivationalContent content) {
-        return userService.addMotivationalContent(content);
-    }
-
-    // Get all motivational content
-    @GetMapping("/motivational-content")
-    public List<MotivationalContent> getAllMotivationalContent() {
-        return userService.getAllMotivationalContent();
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "logout";
     }
 }
