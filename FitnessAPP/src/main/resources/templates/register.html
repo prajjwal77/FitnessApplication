@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,14 +38,16 @@
 <body>
     <div class="register-container">
         <div class="register-header">Register for FITNEX</div>
-        <form action="/register" method="post">
+
+        <!-- Form for registration -->
+       <form th:action="@{/register}" method="post">
             <div class="form-group">
                 <label for="fullName">Full Name</label>
-                <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter your full name" required>
+                <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Enter your full name" th:value="${user?.fullName}" required>
             </div>
             <div class="form-group">
                 <label for="email">Email Address</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" th:value="${user?.email}" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -55,9 +57,19 @@
                 <label for="confirmPassword">Confirm Password</label>
                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
             </div>
+            <!-- Uncomment this if roles are needed -->
+            <!--
+            <div class="form-group">
+                <label for="role">Register As</label>
+                <select class="form-control" id="role" name="role" required>
+                    <option value="USER" th:selected="${user?.role == 'USER'}">User</option>
+                    <option value="ADMIN" th:selected="${user?.role == 'ADMIN'}">Admin</option>
+                </select>
+            </div>
+            -->
             <button type="submit" class="btn btn-custom btn-block">Register</button>
             <div class="text-center mt-3">
-                <small>Already have an account? <a href="/login">Login</a></small>
+                <small>Already have an account? <a th:href="@{/login}">Login</a></small>
             </div>
         </form>
     </div>
