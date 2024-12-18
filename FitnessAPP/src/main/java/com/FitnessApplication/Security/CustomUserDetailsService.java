@@ -1,5 +1,9 @@
 package com.FitnessApplication.Security;
 
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,18 +14,17 @@ import com.FitnessApplication.Repository.UserRepository;
 @Service
 public class CustomUserDetailsService implements UserDetailsService{
 
-    private final UserRepository userRepository;
+	  @Autowired
+	    private UserRepository userRepository;
 
-    // Constructor injection for better testability
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Handle null cases and improve error message
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("No user found with email: " + email));
-        return new CustomUserDetails(user);
-    }
+	    @Override
+	    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	        User user = userRepository.findByEmail(email);
+	        return new org.springframework.security.core.userdetails.User(
+	                user.getEmail(),
+	                user.getPassword(),
+	                user.isEnabled(),
+	                true, true, true,
+	                AuthorityUtils.createAuthorityList("ROLE_USER"));
+	    }
 }
