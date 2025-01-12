@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Plan Results</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Your Plan</h2>
+        <pre th:text="${plan}"></pre>
+        <a th:href="@{/downloadPlan(userInput=${userInput})}" class="btn btn-success">Download PDF</a>
+    </div>
+</body>
+</html>
