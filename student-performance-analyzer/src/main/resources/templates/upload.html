@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Upload Scores</title></head>
+<body>
+    <h2>Upload Student Scores CSV</h2>
+    <form method="post" enctype="multipart/form-data" action="/upload">
+        <input type="file" name="file" accept=".csv" required />
+        <button type="submit">Analyze</button>
+    </form>
+</body>
+</html>
